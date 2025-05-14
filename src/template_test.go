@@ -2,11 +2,12 @@ package main
 
 import (
 	"os"
+	"os/exec"
 	"strings"
 	"testing"
 )
 
-// Test_LoadTemplateAndGetTemplate verifies that a valid HTML template can be parsed and retrieved.
+// TestLoadTemplateAndGetTemplate verifies that a valid HTML template can be parsed and retrieved.
 func TestLoadTemplateAndGetTemplate(t *testing.T) {
 	// Create a temporary HTML template file
 	content := `<html><body><h1>{{.Title}}</h1></body></html>`
@@ -45,5 +46,27 @@ func TestLoadTemplateAndGetTemplate(t *testing.T) {
 	output := sb.String()
 	if !strings.Contains(output, "Test Title") {
 		t.Errorf("template output did not contain expected value: %s", output)
+	}
+}
+
+// TestTriggerLoadTemplateFailure is invoked in a subprocess to trigger LoadTemplate failure.
+func TestTriggerLoadTemplateFailure(t *testing.T) {
+	if os.Getenv("TRIGGER_FAIL") == "1" {
+		LoadTemplate("nonexistent-file.html")
+	}
+}
+
+// TestLoadTemplateFailure validates that LoadTemplate logs fatal error on invalid file.
+func TestLoadTemplateFailure(t *testing.T) {
+	cmd := exec.Command(os.Args[0], "-test.run=TestTriggerLoadTemplateFailure")
+	cmd.Env = append(os.Environ(), "TRIGGER_FAIL=1")
+
+	output, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("expected LoadTemplate to exit with error, but got none. Output:\n%s", string(output))
+	}
+
+	if !strings.Contains(string(output), "failed to load template") {
+		t.Errorf("expected log output to contain failure message. Got:\n%s", string(output))
 	}
 }

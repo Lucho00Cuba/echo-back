@@ -8,18 +8,22 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var osExit = os.Exit
+
 func main() {
 	InitLogger()
 	validateConfig()
 	LoadTemplate(TEMPLATE_HTML)
-	startServer()
+	startServer(http.ListenAndServe)
 }
 
-func startServer() {
+// startServer initializes and runs the HTTP server.
+// Accepts a function to allow injection in tests.
+func startServer(listen func(addr string, handler http.Handler) error) {
 	// Validate PORT
 	if _, err := strconv.Atoi(PORT); err != nil {
 		logger.Error("Invalid port number", "port", PORT, "err", err)
-		os.Exit(1)
+		osExit(1)
 	}
 
 	logger.Info("Starting HTTP server",
@@ -28,13 +32,13 @@ func startServer() {
 		"port", PORT,
 	)
 
-	http.HandleFunc("/", LoggingMiddleware(root))
-	http.HandleFunc("/version", LoggingMiddleware(version))
-	http.HandleFunc("/healthz", LoggingMiddleware(healthz))
-	http.Handle("/metrics", promhttp.Handler())
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", LoggingMiddleware(root))
+	mux.HandleFunc("/version", LoggingMiddleware(version))
+	mux.HandleFunc("/healthz", LoggingMiddleware(healthz))
+	mux.Handle("/metrics", promhttp.Handler())
 
-	// Start server
-	if err := http.ListenAndServe(":"+PORT, nil); err != nil {
+	if err := listen(":"+PORT, mux); err != nil {
 		logger.Error("Failed to start server", "err", err)
 	}
 }

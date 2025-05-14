@@ -123,6 +123,6 @@ func validateConfig() {
 		log.Fatalf("Template file does not exist: %s", TEMPLATE_HTML)
 	}
 	if !validatePortRange(PORT) {
-		log.Fatalf("Invalid PORT configured: %s (must be between 1024–65535)", PORT)
+		log.Fatalf("Invalid PORT configured: %s (must be between 1024-65535)", PORT)
 	}
 }
