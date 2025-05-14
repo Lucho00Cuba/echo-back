@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+## makefile:fmt Run Go tests with coverage
+
+set -euo pipefail
+
+echo "🧪 Running Go tests..."
+
+# Default test directory
+TEST_DIR="${TEST_DIR:-src}"
+
+# Optional verbosity
+GO_TEST_VERBOSE="${GO_TEST_VERBOSE:-false}"
+VERBOSE_FLAG=""
+
+if [[ "$GO_TEST_VERBOSE" == "true" ]]; then
+  VERBOSE_FLAG="-v"
+fi
+
+# Move to the correct directory
+cd "$(dirname "$0")/../$TEST_DIR"
+
+# Run tests with coverage
+if go test $VERBOSE_FLAG -cover -coverprofile=coverage.out -covermode=atomic ./...; then
+  echo "✅ Tests passed"
+else
+  echo "❌ Some tests failed"
+  exit 1
+fi
+
+# Show coverage report if available
+if [[ -f coverage.out ]]; then
+  echo "📊 Generating coverage report..."
+  go tool cover -func=coverage.out | grep -E 'total:|^'
+else
+  echo "⚠️ No coverage file found"
+fi

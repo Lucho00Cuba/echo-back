@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+## makefile:fmt Build Go binary with version injection
+
+set -euo pipefail
+
+# Load version info from external script (VERSION, COMMIT, TAG)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR/.."
+source "${SCRIPT_DIR}/version"
+
+BIN_NAME="echo-back"
+BIN_PATH="$PROJECT_ROOT/dist/$BIN_NAME"
+
+mkdir -p "$PROJECT_ROOT/dist"
+
+echo "🔨 Building $BIN_NAME (version: $VERSION, commit: $COMMIT)"
+
+cd "$PROJECT_ROOT/src"
+go build -ldflags "-X main.VERSION=$VERSION -X main.COMMIT=$COMMIT -X main.NAME=$BIN_NAME" \
+  -o "$BIN_PATH" ./...
+
+if [[ -f "$BIN_PATH" ]]; then
+  echo "✅ Build successful: $BIN_PATH"
+else
+  echo "❌ Build failed: binary not found"
+  exit 1
+fi

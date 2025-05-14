@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+## makefile:fmt Generate Git-based version information
+
+set -euo pipefail
+shopt -s extglob
+
+# Ensure we're in a Git repo
+if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+  echo "❌ Not inside a Git repository."
+  exit 1
+fi
+
+# Dirty flag
+if git diff --quiet --ignore-submodules HEAD 2>/dev/null; then
+  DIRTY=""
+else
+  DIRTY="-dirty"
+fi
+
+# Commit hash
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+
+# Commit date
+COMMIT_DATE=$(git log -1 --format='%ct' 2>/dev/null || echo "0")
+
+# Branch name
+COMMIT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null | sed -E 's/[^a-zA-Z0-9]+/-/g' || echo "unknown")
+
+# Tag (if exists)
+GIT_TAG=${GIT_TAG:-$(git tag --contains HEAD 2>/dev/null | head -n 1 || true)}
+LAST_TAG=${GIT_TAG:-"v0.0.0"}
+
+# Final VERSION
+if [[ -n "$GIT_TAG" && -z "$DIRTY" ]]; then
+  VERSION="$GIT_TAG"
+else
+  VERSION="${COMMIT}${DIRTY}"
+fi
+
+# Final tag logic
+TAG="${GIT_TAG:-$VERSION}"
+[[ "$TAG" == *dirty* ]] && TAG="dev"
+
+# Output exportable vars
+echo "VERSION=$VERSION"
+echo "COMMIT=$COMMIT"
+echo "TAG=$TAG"
+export VERSION COMMIT TAG

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+## makefile:fmt Remove Docker image
+
+set -euo pipefail
+
+IMAGE_NAME="lucho00cuba/echo-back"
+
+echo "🗑️ Removing Docker image: ${IMAGE_NAME}:latest and all tags..."
+docker images | grep "$IMAGE_NAME" | awk '{print $3}' | xargs -r docker rmi -f
+
+echo "✅ Images removed."

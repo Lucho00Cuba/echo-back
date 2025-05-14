@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+## makefile:fmt Lint Go code with golangci-lint
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR/.."
+
+echo "🔍 Running golangci-lint in $(basename "$PROJECT_ROOT")..."
+
+cd "$PROJECT_ROOT"
+
+# Check if golangci-lint is installed
+if ! command -v golangci-lint >/dev/null 2>&1; then
+  echo "❌ golangci-lint is not installed. Install it via:"
+  echo "   go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.1.6"
+  exit 1
+fi
+
+cd $PROJECT_ROOT/src
+# Run the linter
+if golangci-lint run ./...; then
+  echo "✅ Lint passed with no issues."
+else
+  if [[ "${LINT_STRICT:-true}" == "true" ]]; then
+    echo "❌ Lint failed."
+    exit 1
+  else
+    echo "⚠️  Lint found issues, but continuing due to LINT_STRICT=false."
+  fi
+fi

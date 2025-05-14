@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "**/scripts/**": "shellscript"
+    },
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "text": "Generate a conventional commit message in the format type(scope): short description, where:\n\n- type is one of: feat, fix, docs, chore, refactor, test, style, perf, remove\n- scope describes the area or file changed (e.g. config, docker, main, server, middleware, proxy, build, etc.)\n- short description is a concise sentence in imperative mood (e.g. add support for dark mode, fix error handler logic)\n\nThis project is a Go backend called echo-back used as a default backend for Ingress-NGINX.\nUse precise and clean messages aligned with this structure."
+        }
+    ]
+}

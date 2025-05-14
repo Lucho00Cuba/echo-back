@@ -1,0 +1,71 @@
+### 🧾 Variables
+@userAgent = EchoBack/1.0
+@api = http://localhost:3000
+@balancerProtocol = http
+@balancerHost = api.example.io
+@balancer = {{balancerProtocol}}://localhost
+@status_code = 402
+
+###############################################################################
+## 💡 Direct Requests to Echo-Back (Bypass Proxy)
+###############################################################################
+
+### 🧪 JSON Response (Direct)
+POST {{api}}/http-code/{{status_code}}
+User-Agent: {{userAgent}}
+Accept: application/json
+X-Code: {{status_code}}
+X-Scheme: http
+X-Balancer: nginx-proxy
+X-Request-ID: 1234567890
+X-Client-Addr: 127.0.0.1
+X-Namespace: default
+X-Ingress-Name: api
+X-Service-Name: api
+X-Service-Port: 3000
+
+{
+  "data": {
+    "hello": "world"
+  }
+}
+
+### 🧪 HTML Response (Direct)
+POST {{api}}/http-code/{{status_code}}
+User-Agent: {{userAgent}}
+Accept: text/html
+X-Code: {{status_code}}
+X-Scheme: http
+X-Balancer: nginx-proxy
+X-Request-ID: 1234567890
+X-Client-Addr: 127.0.0.1
+X-Namespace: default
+X-Ingress-Name: api
+X-Service-Name: api
+X-Service-Port: 3000
+
+{
+  "hello": "world"
+}
+
+###############################################################################
+## 🌍 Requests via Proxy (Balancer)
+###############################################################################
+
+### 🚦 HTML via Balancer
+GET {{balancer}}/error/html-code/{{status_code}}
+User-Agent: {{userAgent}}
+Accept: text/html
+Host: {{balancerHost}}
+
+### 🚦 JSON via Balancer
+GET {{balancer}}/error/json-code/{{status_code}}
+User-Agent: {{userAgent}}
+Accept: application/json
+Host: {{balancerHost}}
+
+{
+  "data": {
+    "hello": "world"
+  }
+}

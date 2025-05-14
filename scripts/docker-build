@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+## makefile:fmt Build Docker image
+
+set -euo pipefail
+
+# Load version info from external script (VERSION, COMMIT, TAG)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/version"
+
+# BUILD_DATE is generated at build-time here
+BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+IMAGE_NAME="lucho00cuba/echo-back"
+DOCKERFILE="Dockerfile"
+BUILD_DIR="."
+
+echo "🐳 Building Docker image: ${IMAGE_NAME}:${TAG}"
+echo "📦 VERSION: ${VERSION}, COMMIT: ${COMMIT}, BUILD_DATE: ${BUILD_DATE}"
+
+docker build \
+  --build-arg VERSION="${VERSION}" \
+  --build-arg COMMIT="${COMMIT}" \
+  --build-arg BUILD_DATE="${BUILD_DATE}" \
+  -t "${IMAGE_NAME}:${TAG}" \
+  -t "${IMAGE_NAME}:latest" \
+  -f "${DOCKERFILE}" "${BUILD_DIR}"
+
+echo "✅ Docker image built: ${IMAGE_NAME}:${TAG}"
