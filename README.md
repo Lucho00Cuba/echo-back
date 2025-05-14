@@ -4,7 +4,7 @@
 [![Docker Publish](https://github.com/Lucho00Cuba/echo-back/actions/workflows/docker-publish.yaml/badge.svg)](https://github.com/Lucho00Cuba/echo-back/actions/workflows/docker-publish.yaml)
 [![codecov](https://codecov.io/gh/lucho00cuba/echo-back/graph/badge.svg?token=U7Z7UXUXZB)](https://codecov.io/gh/lucho00cuba/echo-back)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/lucho00cuba/echo-back?filename=src%2Fgo.mod)](https://github.com/lucho00cuba/echo-back)
-[![Docker](https://img.shields.io/docker/v/lucho00cuba/echo-back?label=docker&sort=semver)](https://hub.docker.com/r/lucho00cuba/echo-back)
+[![Docker](https://img.shields.io/docker/v/0lucho0/echo-back?label=docker&sort=semver)](https://hub.docker.com/r/0lucho0/echo-back)
 [![License](https://img.shields.io/github/license/lucho00cuba/echo-back)](./LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/lucho00cuba/echo-back)](https://github.com/lucho00cuba/echo-back/commits/master)
 
