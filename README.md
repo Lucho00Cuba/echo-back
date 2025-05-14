@@ -1,9 +1,9 @@
 # Echo-Back
 
 [![Lint & Test](https://github.com/Lucho00Cuba/echo-back/actions/workflows/test-and-format.yaml/badge.svg)](https://github.com/Lucho00Cuba/echo-back/actions/workflows/test-and-format.yaml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/lucho00cuba/echo-back)](https://goreportcard.com/report/github.com/lucho00cuba/echo-back)
-[![Coverage](https://codecov.io/gh/lucho00cuba/echo-back/branch/master/graph/badge.svg)](https://codecov.io/gh/lucho00cuba/echo-back)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/lucho00cuba/echo-back)](https://github.com/lucho00cuba/echo-back)
+[![Docker Publish](https://github.com/Lucho00Cuba/echo-back/actions/workflows/docker-publish.yaml/badge.svg)](https://github.com/Lucho00Cuba/echo-back/actions/workflows/docker-publish.yaml)
+[![codecov](https://codecov.io/gh/lucho00cuba/echo-back/graph/badge.svg?token=U7Z7UXUXZB)](https://codecov.io/gh/lucho00cuba/echo-back)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/lucho00cuba/echo-back?filename=src%2Fgo.mod)](https://github.com/lucho00cuba/echo-back)
 [![Docker](https://img.shields.io/docker/v/lucho00cuba/echo-back?label=docker&sort=semver)](https://hub.docker.com/r/lucho00cuba/echo-back)
 [![License](https://img.shields.io/github/license/lucho00cuba/echo-back)](./LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/lucho00cuba/echo-back)](https://github.com/lucho00cuba/echo-back/commits/master)
@@ -47,17 +47,17 @@ The root endpoint catches all unmatched requests and returns an HTML or JSON res
 
 ### 📥 Request Headers
 
-| Header Name       | Description                                               | Required |
-|-------------------|-----------------------------------------------------------|----------|
-| `X-Request-ID`     | Unique identifier for tracing the request                | No       |
-| `X-Client-Addr`    | IP address of the client                                 | No       |
-| `X-Code`           | HTTP status code to return (defaults to 200)             | No       |
-| `X-Service-Name`   | Name of the upstream service                             | No       |
-| `X-Service-Port`   | Port of the upstream service                             | No       |
-| `X-Ingress-Name`   | Name of the Ingress resource                             | No       |
-| `X-Namespace`      | Kubernetes namespace where the service resides           | No       |
-| `Content-Type`     | Format of the request payload (e.g., `application/json`) | No       |
-| `Accept`           | Accepted response format (e.g., `application/json`)      | No       |
+| Header Name      | Description                                              | Required |
+| ---------------- | -------------------------------------------------------- | -------- |
+| `X-Request-ID`   | Unique identifier for tracing the request                | No       |
+| `X-Client-Addr`  | IP address of the client                                 | No       |
+| `X-Code`         | HTTP status code to return (defaults to 200)             | No       |
+| `X-Service-Name` | Name of the upstream service                             | No       |
+| `X-Service-Port` | Port of the upstream service                             | No       |
+| `X-Ingress-Name` | Name of the Ingress resource                             | No       |
+| `X-Namespace`    | Kubernetes namespace where the service resides           | No       |
+| `Content-Type`   | Format of the request payload (e.g., `application/json`) | No       |
+| `Accept`         | Accepted response format (e.g., `application/json`)      | No       |
 
 ---
 
