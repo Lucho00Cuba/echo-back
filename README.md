@@ -1,6 +1,6 @@
 # Echo-Back
 
-[![Build](https://github.com/lucho00cuba/echo-back/actions/workflows/test-and-format.yml/badge.svg)](https://github.com/lucho00cuba/echo-back/actions)
+[![Lint & Test](https://github.com/Lucho00Cuba/echo-back/actions/workflows/test-and-format.yaml/badge.svg)](https://github.com/Lucho00Cuba/echo-back/actions/workflows/test-and-format.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lucho00cuba/echo-back)](https://goreportcard.com/report/github.com/lucho00cuba/echo-back)
 [![Coverage](https://codecov.io/gh/lucho00cuba/echo-back/branch/master/graph/badge.svg)](https://codecov.io/gh/lucho00cuba/echo-back)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/lucho00cuba/echo-back)](https://github.com/lucho00cuba/echo-back)
