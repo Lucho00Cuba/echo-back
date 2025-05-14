@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -19,8 +20,12 @@ func setup() {
 	InitLogger()
 	// Set template
 	tmp, _ := os.CreateTemp("", "tmpl.html")
-	tmp.WriteString(`<html><body>{{.API.Metadata.Name}}</body></html>`)
-	tmp.Close()
+	if _, err := tmp.WriteString(`<html><body>{{.API.Metadata.Name}}</body></html>`); err != nil {
+		log.Fatalf("failed to write template: %v", err)
+	}
+	if err := tmp.Close(); err != nil {
+		log.Fatalf("failed to close template file: %v", err)
+	}
 	TEMPLATE_HTML = tmp.Name()
 	LoadTemplate(TEMPLATE_HTML)
 }
@@ -41,7 +46,11 @@ func TestHealthz(t *testing.T) {
 	healthz(rec, req)
 
 	res := rec.Result()
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			t.Logf("failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200; got %d", res.StatusCode)
@@ -71,7 +80,11 @@ func TestVersion(t *testing.T) {
 	version(rec, req)
 
 	res := rec.Result()
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			t.Logf("failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200; got %d", res.StatusCode)
@@ -109,7 +122,11 @@ func TestRoot_JSON(t *testing.T) {
 	root(rec, req)
 
 	res := rec.Result()
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			t.Logf("failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != 201 {
 		t.Errorf("Expected 201; got %d", res.StatusCode)
@@ -139,13 +156,19 @@ func TestRoot_HTML(t *testing.T) {
 	root(rec, req)
 
 	res := rec.Result()
-	defer res.Body.Close()
+	defer func() {
+		if err := res.Body.Close(); err != nil {
+			t.Logf("failed to close response body: %v", err)
+		}
+	}()
 
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("Expected 200; got %d", res.StatusCode)
 	}
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(res.Body)
+	if _, err := buf.ReadFrom(res.Body); err != nil {
+		t.Fatalf("failed to read response body: %v", err)
+	}
 	html := buf.String()
 	if !strings.Contains(html, NAME) {
 		t.Errorf("Expected HTML response to contain name %s; got %s", NAME, html)

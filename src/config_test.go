@@ -120,7 +120,11 @@ func TestValidateConfigSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create temp template: %v", err)
 	}
-	defer os.Remove(tmpFile.Name())
+	defer func() {
+		if err := os.Remove(tmpFile.Name()); err != nil {
+			t.Logf("cleanup failed: %v", err)
+		}
+	}()
 
 	t.Setenv("EMAIL", "valid@example.com")
 	t.Setenv("TEMPLATE_HTML", tmpFile.Name())
