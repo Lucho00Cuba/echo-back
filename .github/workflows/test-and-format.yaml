@@ -60,8 +60,10 @@ jobs:
         with:
           name: coverage.out
           path: src/coverage.out
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           files: src/coverage.out
+          token: ${{ secrets.CODECOV_TOKEN }}
