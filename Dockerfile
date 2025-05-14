@@ -4,6 +4,7 @@ FROM golang:${GOLANG_VERSION} AS builder
 
 ARG VERSION
 ARG COMMIT
+ARG RUN_TESTS=false
 
 ENV CGO_ENABLED=0 \
     GOOS=linux \
@@ -14,9 +15,16 @@ WORKDIR /go/src/echo-back
 # Copy the source code
 COPY src/ .
 
-# Run tests (optional for CI only — comment out for release build)
-RUN go mod tidy && go mod verify && \
-    go test -cover -v ./...
+# Dependencies
+RUN go mod tidy && go mod verify
+
+# Conditionally run tests in local/dev builds
+RUN if [ "$RUN_TESTS" = "true" ]; then \
+      echo "🧪 Running tests..."; \
+      go test -cover -v ./...; \
+    else \
+      echo "🚫 Skipping tests (RUN_TESTS=$RUN_TESTS)"; \
+    fi
 
 # Build the binary with reproducibility and metadata
 RUN go build -trimpath -ldflags="-s -w -X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT}" \
