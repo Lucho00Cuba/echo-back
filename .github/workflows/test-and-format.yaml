@@ -52,7 +52,7 @@ jobs:
 
       - name: Run tests
         run: |
-          go test -v -coverprofile=coverage.out -covermode=atomic ./...
+          go test -v -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
           go tool cover -func=coverage.out
 
       - name: Upload coverage report
@@ -66,3 +66,5 @@ jobs:
         with:
           files: src/coverage.out
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          root_dir: src
