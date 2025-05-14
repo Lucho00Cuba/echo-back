@@ -56,8 +56,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ env.DOCKER_USERNAME }}/echo-back:latest
-            ${{ env.DOCKER_USERNAME }}/echo-back:${{ steps.meta.outputs.version }}
+            ${{ vars.DOCKER_USERNAME }}/echo-back:latest
+            ${{ vars.DOCKER_USERNAME }}/echo-back:${{ steps.meta.outputs.version }}
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
             COMMIT=${{ github.sha }}
