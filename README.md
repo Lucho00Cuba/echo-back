@@ -38,6 +38,16 @@ flowchart TD
     nginx_proxy -->|HTTP Response| client
 ```
 
+## ⚙️ Environment Variables
+
+| Variable        | Description                          | Default                 |
+| --------------- | ------------------------------------ | ----------------------- |
+| `PORT`          | Port the server listens on           | `3000`                  |
+| `TEMPLATE_HTML` | Path to HTML template                | `templates/simple.html` |
+| `DEBUG`         | Enables debug mode (logs body, etc.) | `true`                  |
+| `LOG_LEVEL`     | Logging level (`debug`, `info`, ...) | `info`                  |
+| `LOG_FORMAT`    | Logging format (`text`, `json`)      | `text`                  |
+
 
 ## 📘 API Reference
 
@@ -142,7 +152,7 @@ controller:
   defaultBackend:
     enabled: true
     image:
-      repository: docker.io/lucho00cuba/echo-back
+      repository: docker.io/0lucho0/echo-back
       tag: latest
 ```
 
